@@ -12,22 +12,18 @@ wss.on('connection', (ws) => {
     console.log('Client conectat');
 
     ws.on('message', (message) => {
-        console.log('Mesaj primit:', message.toString());
+        console.log("Mesaj primit:", message.toString());
 
-        // Trimite mesajul tuturor clienților conectați
+        // Trimite mesajul tuturor clienților
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-
-                // lmnjbvdsan
-                client.send(message.toString()); // asigură că e string
+                client.send(message.toString());
             }
         });
     });
 
     ws.on('close', () => {
-
-
-        console.log('Client deconectat ');
+        console.log("Client deconectat");
     });
 });
 
