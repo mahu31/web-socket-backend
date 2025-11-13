@@ -65,21 +65,16 @@ wss.on("connection", (ws) => {
             console.log(`✅ ${parsed.name} s-a conectat`);
             const sysMsg = { type: "system", text: `✅ ${parsed.name} s-a alăturat chat-ului`, timestamp: Date.now() };
             broadcast(sysMsg);
-            // poți salva sistem messages dacă vrei:
-            // allMessages.push(sysMsg);
-            // saveMessages(allMessages);
             return;
         }
 
         if (parsed.type === "message") {
             const msgObj = { ...parsed, timestamp: Date.now() };
 
-            // adăugăm în memorie și salvăm
             allMessages.push(msgObj);
             saveMessages(allMessages);
 
             broadcast(msgObj);
-            return;
         }
 
         // alte tipuri: ignorăm sau extindem
@@ -91,9 +86,6 @@ wss.on("connection", (ws) => {
             console.log(`❌ ${name} s-a deconectat`);
             const sysMsg = { type: "system", text: `❌ ${name} a părăsit chat-ul`, timestamp: Date.now() };
             broadcast(sysMsg);
-            // poți salva sistem messages dacă vrei:
-            // allMessages.push(sysMsg);
-            // saveMessages(allMessages);
             users.delete(ws);
         } else {
             console.log("Client fără username s-a deconectat");
@@ -109,3 +101,4 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
     console.log(`Serverul rulează pe http://localhost:${PORT}`);
 });
+
