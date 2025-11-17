@@ -8,12 +8,10 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const users = new Map(); // ws -> name
+const users = new Map();
 
-// Fișier JSON pentru mesaje
 const MESSAGES_FILE = path.join(__dirname, "messages.json");
 
-// Funcții pentru citire și scriere
 function loadMessages() {
     try {
         const data = fs.readFileSync(MESSAGES_FILE, "utf-8");
@@ -31,10 +29,8 @@ function saveMessages(messages) {
     }
 }
 
-// Mesaje în memorie
 let allMessages = loadMessages();
 
-// Funcție broadcast
 function broadcast(obj) {
     const json = JSON.stringify(obj);
     wss.clients.forEach((client) => {
@@ -47,7 +43,6 @@ function broadcast(obj) {
 wss.on("connection", (ws) => {
     console.log("Client conectat (socket).");
 
-    // trimitem istoricul către clientul nou
     ws.send(JSON.stringify({ type: "history", messages: allMessages }));
 
     ws.on("message", (data) => {
@@ -77,7 +72,6 @@ wss.on("connection", (ws) => {
             broadcast(msgObj);
         }
 
-        // alte tipuri: ignorăm sau extindem
     });
 
     ws.on("close", () => {
